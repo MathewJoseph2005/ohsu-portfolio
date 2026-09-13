@@ -2,6 +2,7 @@ import { INSTAGRAM_URL, withBase } from '@/lib/site';
 import PageTransition from '@/components/PageTransition';
 import Reveal from '@/components/Reveal';
 import WorkTile, { type WorkItem } from '@/components/WorkTile';
+import VideoTile, { type VideoItem } from '@/components/VideoTile';
 import ReelsCarousel from '@/components/ReelsCarousel';
 import Footer from '@/components/Footer';
 
@@ -17,6 +18,60 @@ const animationTile: WorkItem = {
   caption: 'Classical dance performance — edited reel',
   instagramUrl: INSTAGRAM_URL,
 };
+
+const animationVideos: VideoItem[] = [
+  {
+    src: '/work/anim-reel-01.mp4',
+    alt: 'Animated motion piece 01',
+    caption: 'Animation — motion piece 01',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-reel-02.mp4',
+    alt: 'Animated motion piece 02',
+    caption: 'Animation — motion piece 02',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-reel-03.mp4',
+    alt: 'Animated motion piece 03',
+    caption: 'Animation — motion piece 03',
+    instagramUrl: INSTAGRAM_URL,
+  },
+];
+
+const animationArt: WorkItem[] = [
+  {
+    src: '/work/anim-naama-teaser.jpg',
+    alt: 'Coming-soon teaser with hand-drawn lotus pond illustration',
+    caption: 'Coming-soon teaser — hand-drawn lotus pond illustration',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-portrait-amber.jpg',
+    alt: 'Amber-toned two-face vector portrait illustration',
+    caption: 'Amber portrait — two-face vector illustration, digital art',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-two-shadows.jpg',
+    alt: 'Couple walking by the sea at night under stars, illustration',
+    caption: 'Two shadows, one unspoken story — night seaside illustration',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-golden-hour.jpg',
+    alt: 'Two figures in a boat at golden hour, vector illustration',
+    caption: 'Golden hour — sunset boat vector illustration',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-eyes-chico.jpg',
+    alt: 'Split-frame close-up of two pairs of eyes, illustration',
+    caption: 'The eyes chico, they never lie — split-frame illustration',
+    instagramUrl: INSTAGRAM_URL,
+  },
+];
 
 const adsItems: WorkItem[] = [
   {
@@ -155,6 +210,24 @@ export default function Work() {
             </a>
           </div>
         </Reveal>
+        {/* Animation motion pieces */}
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {animationVideos.map((item, i) => (
+            <Reveal key={item.src} delay={i * 0.08}>
+              <VideoTile item={item} aspect="aspect-[4/5]" />
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Animation illustration frames */}
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {animationArt.map((item, i) => (
+            <Reveal key={item.src} delay={(i % 3) * 0.08}>
+              <WorkTile item={item} aspect="aspect-[4/5]" />
+            </Reveal>
+          ))}
+        </div>
+
         <Reveal delay={0.15} className="mt-8">
           <p className="max-w-2xl font-sans text-sm leading-relaxed text-paper/60">
             {ANIMATION_PARAGRAPH}
