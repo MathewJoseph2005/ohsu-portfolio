@@ -31,24 +31,6 @@ const animationVideos: VideoItem[] = [
     caption: 'Animation — motion piece 03',
     instagramUrl: INSTAGRAM_URL,
   },
-  {
-    src: '/work/anim-reel-04.mp4',
-    alt: 'Animated motion piece 04',
-    caption: 'Animation — motion piece 04',
-    instagramUrl: INSTAGRAM_URL,
-  },
-  {
-    src: '/work/anim-reel-05.mp4',
-    alt: 'Animated motion piece 05',
-    caption: 'Animation — motion piece 05',
-    instagramUrl: INSTAGRAM_URL,
-  },
-  {
-    src: '/work/anim-reel-06.mp4',
-    alt: 'Animated motion piece 06',
-    caption: 'Animation — motion piece 06',
-    instagramUrl: INSTAGRAM_URL,
-  },
 ];
 
 const animationArt: WorkItem[] = [
@@ -118,6 +100,27 @@ const reels = [
     src: '/work/dance-photo-editorial.jpg',
     alt: 'Three-portrait dancer editorial composite',
     caption: 'Dancer editorial — three-portrait composite, digital photo art',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    kind: 'video' as const,
+    src: '/work/reel-01.mp4',
+    alt: 'Light-leak film reel',
+    caption: 'Light-leak film reel',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    kind: 'video' as const,
+    src: '/work/reel-02.mp4',
+    alt: 'Bus-stop film reel',
+    caption: 'Bus-stop film reel',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    kind: 'video' as const,
+    src: '/work/reel-03.mp4',
+    alt: 'Halftone dance reel',
+    caption: 'Halftone dance reel',
     instagramUrl: INSTAGRAM_URL,
   },
 ];
