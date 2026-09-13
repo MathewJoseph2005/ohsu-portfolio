@@ -7,7 +7,7 @@ import ReelsCarousel from '@/components/ReelsCarousel';
 import Footer from '@/components/Footer';
 
 const ANIMATION_PARAGRAPH =
-  'Movement is design in time. This classical dance performance was edited into a reel that keeps the discipline of the form and gives it a contemporary frame — colour, pacing and cuts tuned so the emotion of each gesture reads clearly on a small screen.';
+  'Animation is illustration given time. These motion pieces and illustrated frames started as flat vector artwork — faces, eyes, couples, lotus ponds — then found rhythm: blinks, drifting water, fading light. Each one is built frame by frame to carry a single feeling, from a coming-soon teaser to quiet cinematic moments.';
 
 const ADS_PARAGRAPH =
   'Identity work and campaign design. From the Evrista mark itself to festival campaigns and branded concept posters, each piece is built around a single clear idea and executed across type, colour and composition so it feels like one voice.';
