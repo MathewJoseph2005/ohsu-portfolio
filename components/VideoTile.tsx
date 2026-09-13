@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { withBase } from '@/lib/site';
 import GrainOverlay from './GrainOverlay';
+import LazyVideo from './LazyVideo';
 
 export type VideoItem = {
   src: string;
@@ -31,12 +31,8 @@ export default function VideoTile({
       className={`group relative block overflow-hidden border hairline bg-ink ${aspect}`}
       aria-label={item.caption}
     >
-      <video
-        src={withBase(item.src)}
-        muted
-        loop
-        playsInline
-        autoPlay
+      <LazyVideo
+        src={item.src}
         className="h-full w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.03]"
       />
 

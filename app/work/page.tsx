@@ -25,12 +25,6 @@ const animationVideos: VideoItem[] = [
     caption: 'Animation — motion piece 02',
     instagramUrl: INSTAGRAM_URL,
   },
-  {
-    src: '/work/anim-reel-03.mp4',
-    alt: 'Animated motion piece 03',
-    caption: 'Animation — motion piece 03',
-    instagramUrl: INSTAGRAM_URL,
-  },
 ];
 
 const animationArt: WorkItem[] = [
@@ -121,6 +115,13 @@ const reels = [
     src: '/work/reel-03.mp4',
     alt: 'Halftone dance reel',
     caption: 'Halftone dance reel',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    kind: 'video' as const,
+    src: '/work/reel-04.mp4',
+    alt: 'Batch of 27–28 film reel',
+    caption: 'Batch of ’27–’28 — memory film reel',
     instagramUrl: INSTAGRAM_URL,
   },
 ];

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { withBase } from '@/lib/site';
 import GrainOverlay from './GrainOverlay';
+import LazyVideo from './LazyVideo';
 
 type Reel = {
   kind: 'video' | 'image';
@@ -117,12 +118,8 @@ function ReelCard({ reel }: { reel: Reel }) {
     >
       <div className="relative aspect-[9/16] overflow-hidden">
         {reel.kind === 'video' ? (
-          <video
-            src={withBase(reel.src)}
-            muted
-            loop
-            playsInline
-            autoPlay
+          <LazyVideo
+            src={reel.src}
             className="h-full w-full object-cover"
           />
         ) : (
