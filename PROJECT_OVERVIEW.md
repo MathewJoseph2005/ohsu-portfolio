@@ -18,10 +18,11 @@ Fully static — deploys to GitHub Pages with zero server code.
 
 1. **Fully static.** `output: 'export'` in `next.config.js`. No API routes, no server
    actions, no middleware, no ISR. Everything must build to plain HTML/CSS/JS in `out/`.
-2. **Base path.** Production builds run under `/ohsu-portfolio` (GitHub Pages project
-   site). `next.config.js` sets `basePath`/`assetPrefix` from `NEXT_PUBLIC_BASE_TARGET`
-   (`'github'` → prefixed, anything else → root-relative for Vercel).
-   - The GitHub Actions workflow sets `NEXT_PUBLIC_BASE_TARGET: github`.
+2. **Base path.** Production builds run under `/ohsu-portfolio` on GitHub Pages.
+   `next.config.js` applies `basePath`/`assetPrefix` only when `DEPLOY_TARGET=gh-pages`
+   is set — the GitHub Actions workflow sets exactly that; Vercel builds without it and
+   gets root-relative URLs.
+   - Never hardcode `/ohsu-portfolio` in source.
    - Use `next/link` for internal navigation; never hardcode `/ohsu-portfolio` in source.
 3. **Raw asset URLs** (img/video src) go through `withBase('/work/...')` from
    `lib/site.ts` (reads `NEXT_PUBLIC_BASE_PATH`). `next/image` already respects basePath.
@@ -122,7 +123,9 @@ visible, not hover-only).
    5 illustration stills (`anim-*.jpg`). The animated-illustration clips belong HERE,
    not in Reels.
 2. **02 / ADS & LOGO** — ER logo, Freelynx Onam poster, "അപ്പോ തുടങ്ങിയാലോ?" branded poster.
-3. **03 / REELS** — pinned scroll-driven horizontal carousel with exactly 3 items:
+3. **03 / REELS** — natural-flow showcase (no scroll-jacking — the pinned
+   scroll-driven carousel was removed deliberately because the set is only 3 items):
+   staggered 3-across grid on desktop, snap-swipe strip on mobile. Exactly 3 items:
    `dance-reel.mp4` (classical dance), `dance-photo-editorial.jpg` (three-portrait
    composite), `reel-04.mp4` ("Batch of '27–'28" memory film).
 4. **04 / POSTERS** — 8-tile grid: 7 film-poster recreations (Aravindante Athidhikal,
@@ -171,12 +174,14 @@ there with clean names if re-importing. Images are already web-sized (76–323 K
 - Repo Pages settings: **Source = GitHub Actions** (already configured via API).
 - Site: https://MathewJoseph2005.github.io/ohsu-portfolio/
 
-### Vercel (secondary — pending user token)
-- Build config is already Vercel-ready: without `NEXT_PUBLIC_BASE_TARGET=github`, the
-  build produces root-relative URLs (no `/ohsu-portfolio` prefix).
-- Deploy = import repo in Vercel dashboard (framework auto-detects Next.js), or deploy
-  via API with a Vercel access token (CLI install times out on this machine's npm).
-- `output: 'export'` works fine on Vercel (serves `out/` statically).
+### Vercel (secondary)
+- Import the repo at vercel.com/new — Next.js auto-detects, no env vars required.
+- Without `DEPLOY_TARGET`, builds emit root-relative URLs (no `/ohsu-portfolio`).
+- `vercel.json` sets `trailingSlash: true` (matches the exported directory structure
+  `/work/` links) plus long-cache for `/_next/static/*` and daily-refresh cache for
+  media in `/work/*`.
+- Do not add `cleanUrls` — the export already contains `index.html` files inside
+  folders; stripping `.html` is a rewrite, not needed.
 
 ---
 

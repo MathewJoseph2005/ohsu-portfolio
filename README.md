@@ -17,13 +17,22 @@ npm run dev
 
 ## Deploy
 
-Push to `main`. The included GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the static site and publishes it.
+**GitHub Pages (automatic):** push to `main`. The workflow (`.github/workflows/deploy.yml`) builds with `DEPLOY_TARGET=gh-pages` so all URLs carry the `/ohsu-portfolio` base path, then publishes. First time only: enable **Settings → Pages → Source: GitHub Actions**.
 
-> First time only: enable Pages in the repo under **Settings → Pages → Source: GitHub Actions**.
+**Vercel:** import the repo at vercel.com/new — framework auto-detects Next.js, no env vars needed. Without `DEPLOY_TARGET`, the build emits root-relative URLs. `vercel.json` adds clean-URL caching for media and static chunks.
+
+## Checks before pushing
+
+```bash
+npm run typecheck   # tsc --noEmit
+npm run build       # must stay green, all routes ○ static
+```
 
 ## Structure
 
 - `app/page.tsx` — Home (hero crossfade, brand manifesto, founder bio, Instagram CTA)
 - `app/work/page.tsx` — Work (Animation, Ads & Logo, Reels, Posters)
-- `lib/site.ts` — all site data (copy, captions, asset manifest) in one place
+- `lib/site.ts` — site constants (brand copy, Instagram URL, `withBase()`)
+- `PROJECT_OVERVIEW.md` — full architecture doc (give this to AI assistants as context)
+- `vercel.json` — Vercel deploy config (caching, trailing slash)
 - `public/work/` — portfolio assets
