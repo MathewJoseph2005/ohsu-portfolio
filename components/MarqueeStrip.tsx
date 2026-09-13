@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from 'framer-motion';
 
-const WORDS = [
+const DEFAULT_WORDS = [
   'hand-drawn frames',
   'vector portraits',
   'moonlit windows',
@@ -12,11 +12,15 @@ const WORDS = [
 ];
 
 /**
- * Thin infinite marquee of motion-keywords. Sits between the header and the
- * grid, giving the section the texture an editorial spread has between
- * chapters. Pure CSS keyframes; reverses and slows under reduced motion.
+ * Thin infinite marquee of keywords. Sits between chapters, giving the page
+ * the texture an editorial spread has between sections. Pure CSS keyframes;
+ * reverses and slows under reduced motion.
  */
-export default function MarqueeStrip() {
+export default function MarqueeStrip({
+  words = DEFAULT_WORDS,
+}: {
+  words?: string[];
+}) {
   const reduce = useReducedMotion();
 
   return (
@@ -34,7 +38,7 @@ export default function MarqueeStrip() {
       >
         {[0, 1].map((copy) => (
           <div key={copy} className="flex gap-12" aria-hidden={copy === 1}>
-            {WORDS.map((word) => (
+            {words.map((word) => (
               <span
                 key={word}
                 className="flex items-center gap-12 font-sans text-[11px] uppercase tracking-[0.3em] text-paper/35"

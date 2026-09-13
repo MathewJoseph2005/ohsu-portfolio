@@ -4,6 +4,9 @@ import { INSTAGRAM_URL, BRAND, FOUNDER, withBase } from '@/lib/site';
 import PageTransition from '@/components/PageTransition';
 import Footer from '@/components/Footer';
 import Reveal from '@/components/Reveal';
+import MaskedText from '@/components/MaskedText';
+import AnimatedStat from '@/components/AnimatedStat';
+import MarqueeStrip from '@/components/MarqueeStrip';
 import HeroCrossfade from '@/components/HeroCrossfade';
 import InstagramIcon from '@/components/InstagramIcon';
 
@@ -26,11 +29,15 @@ export default function Home() {
             <Reveal>
               <p className="label mb-6">A CREATIVE MEDIA &amp; DESIGN VENTURE</p>
             </Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="font-serif text-[18vw] leading-[0.9] text-paper md:text-[9rem]">
-                Evri<span className="text-blush">sta</span>
-              </h2>
-            </Reveal>
+            <h2 className="font-serif text-[18vw] leading-[0.9] text-paper md:text-[9rem]">
+              <MaskedText
+                text="Evrista"
+                by="letters"
+                delay={0.25}
+                stagger={0.07}
+                accentFrom={4}
+              />
+            </h2>
             <Reveal delay={0.2}>
               <p className="mt-8 max-w-md font-sans text-sm uppercase leading-relaxed tracking-[0.18em] text-paper/50">
                 IDEAS &amp; EMOTIONS, MADE VISIBLE
@@ -89,6 +96,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ DISCIPLINES MARQUEE ============ */}
+      <MarqueeStrip
+        words={[
+          'graphic design',
+          'digital art',
+          'editing',
+          'visual storytelling',
+          'illustration',
+          'motion',
+        ]}
+      />
+
       {/* ============ FOUNDER BIO ============ */}
       <section className="border-t hairline bg-paper/[0.02]">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-[220px_1fr] md:px-10 md:py-36">
@@ -137,16 +156,29 @@ export default function Home() {
           <Reveal>
             <p className="label mb-6">SEE THE WORK</p>
           </Reveal>
-          <Reveal delay={0.1}>
+          <h2 className="font-serif text-[13vw] leading-none text-paper md:text-8xl">
+            <MaskedText text="View Work" by="letters" stagger={0.06} />
             <Link
               href="/work/"
-              className="group inline-block font-serif text-[13vw] leading-none text-paper transition-colors duration-500 hover:text-blush md:text-8xl"
+              aria-label="View the work"
+              className="group ml-4 inline-block transition-colors duration-500 hover:text-blush"
             >
-              View Work
-              <span className="ml-4 inline-block transition-transform duration-300 group-hover:translate-x-2">
+              <span className="inline-block transition-transform duration-300 group-hover:translate-x-2">
                 →
               </span>
             </Link>
+          </h2>
+
+          <div className="mx-auto mt-16 grid max-w-3xl grid-cols-3 gap-8 border-t hairline pt-10">
+            <AnimatedStat value={16} label="PIECES IN THE ARCHIVE" pad={2} />
+            <AnimatedStat value={4} label="ROOMS TO WALK THROUGH" pad={1} />
+            <AnimatedStat value={1} label="STUDIO BEHIND THEM" pad={1} />
+          </div>
+
+          <Reveal delay={0.3}>
+            <p className="label mt-12">
+              TAKES ABOUT TWO SCROLLS — WORTH IT
+            </p>
           </Reveal>
         </div>
       </section>
