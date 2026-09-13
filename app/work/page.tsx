@@ -4,6 +4,8 @@ import Reveal from '@/components/Reveal';
 import WorkTile, { type WorkItem } from '@/components/WorkTile';
 import VideoTile, { type VideoItem } from '@/components/VideoTile';
 import ReelsCarousel from '@/components/ReelsCarousel';
+import ParallaxItem from '@/components/ParallaxItem';
+import MarqueeStrip from '@/components/MarqueeStrip';
 import Footer from '@/components/Footer';
 
 const ANIMATION_DESCRIPTION =
@@ -204,6 +206,18 @@ function SectionHeader({
   );
 }
 
+/** Oversized ghost word bleeding behind the Animation showcase (decorative). */
+function GhostWord({ word, className = '' }: { word: string; className?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute z-0 select-none font-serif text-[22vw] leading-none text-paper/[0.04] ${className}`}
+    >
+      {word}
+    </span>
+  );
+}
+
 export default function Work() {
   return (
     <PageTransition>
@@ -226,7 +240,7 @@ export default function Work() {
       </section>
 
       {/* ============ 01 ANIMATION ============ */}
-      <section className="mx-auto max-w-7xl px-6 pb-24 md:px-10">
+      <section className="relative mx-auto max-w-7xl px-6 pb-32 md:px-10">
         <SectionHeader
           index="01"
           title="ANIMATION"
@@ -234,22 +248,57 @@ export default function Work() {
           description={ANIMATION_DESCRIPTION}
         />
 
-        {/* Animation motion pieces */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {animationVideos.map((item, i) => (
-            <Reveal key={item.src} delay={i * 0.08}>
-              <VideoTile item={item} aspect="aspect-[4/5]" />
-            </Reveal>
-          ))}
-        </div>
+        <MarqueeStrip />
 
-        {/* Animation illustration frames */}
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {animationArt.map((item, i) => (
-            <Reveal key={item.src} delay={(i % 3) * 0.08}>
-              <WorkTile item={item} aspect="aspect-[4/5]" />
-            </Reveal>
-          ))}
+        <div className="relative">
+          <GhostWord
+            word="MOTION"
+            className="right-0 top-40 hidden lg:block"
+          />
+
+          {/* Feature row: first clip cinematic-wide, second smaller and pushed down */}
+          <div className="relative z-10 mt-14 grid gap-6 lg:grid-cols-12">
+            <ParallaxItem className="lg:col-span-7" amplitude={18}>
+              <VideoTile item={animationVideos[0]} aspect="aspect-[4/3]" />
+            </ParallaxItem>
+            <ParallaxItem className="lg:col-span-4 lg:col-start-9 lg:mt-40" amplitude={36}>
+              <VideoTile item={animationVideos[1]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+          </div>
+
+          {/* Interlude: third clip + first stills, overlapping the ghost word */}
+          <div className="relative z-10 mt-24 grid gap-6 lg:grid-cols-12">
+            <ParallaxItem className="lg:col-span-4 lg:col-start-2" amplitude={30}>
+              <VideoTile item={animationVideos[2]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+            <ParallaxItem className="lg:col-span-4 lg:col-start-7 lg:mt-16" amplitude={42}>
+              <WorkTile item={animationArt[0]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+            <ParallaxItem className="lg:col-span-3 lg:col-start-11" amplitude={26}>
+              <WorkTile item={animationArt[1]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+          </div>
+
+          {/* Remaining stills: offset staircase rhythm instead of a flat row */}
+          <div className="relative z-10 mt-24 grid gap-6 sm:grid-cols-2 lg:grid-cols-12">
+            <ParallaxItem className="lg:col-span-4" amplitude={22}>
+              <WorkTile item={animationArt[2]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+            <ParallaxItem className="lg:col-span-4 lg:mt-20" amplitude={34}>
+              <WorkTile item={animationArt[3]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+            <ParallaxItem className="lg:col-span-4 lg:mt-40" amplitude={44}>
+              <WorkTile item={animationArt[4]} aspect="aspect-[4/5]" />
+            </ParallaxItem>
+          </div>
+
+          {/* Decorative corner metadata */}
+          <span className="label absolute left-0 top-24 hidden lg:block">
+            SEQ. 01 — FRAMES IN MOTION
+          </span>
+          <span className="label absolute bottom-0 right-0 hidden lg:block">
+            RENDER: LOOP ∞
+          </span>
         </div>
       </section>
 
