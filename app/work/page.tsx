@@ -1,4 +1,4 @@
-import { INSTAGRAM_URL, withBase } from '@/lib/site';
+import { INSTAGRAM_URL } from '@/lib/site';
 import PageTransition from '@/components/PageTransition';
 import Reveal from '@/components/Reveal';
 import WorkTile, { type WorkItem } from '@/components/WorkTile';
@@ -11,13 +11,6 @@ const ANIMATION_PARAGRAPH =
 
 const ADS_PARAGRAPH =
   'Identity work and campaign design. From the Evrista mark itself to festival campaigns and branded concept posters, each piece is built around a single clear idea and executed across type, colour and composition so it feels like one voice.';
-
-const animationTile: WorkItem = {
-  src: '/work/dance-reel.mp4',
-  alt: 'Classical dance performance reel',
-  caption: 'Classical dance performance — edited reel',
-  instagramUrl: INSTAGRAM_URL,
-};
 
 const animationVideos: VideoItem[] = [
   {
@@ -36,6 +29,24 @@ const animationVideos: VideoItem[] = [
     src: '/work/anim-reel-03.mp4',
     alt: 'Animated motion piece 03',
     caption: 'Animation — motion piece 03',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-reel-04.mp4',
+    alt: 'Animated motion piece 04',
+    caption: 'Animation — motion piece 04',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-reel-05.mp4',
+    alt: 'Animated motion piece 05',
+    caption: 'Animation — motion piece 05',
+    instagramUrl: INSTAGRAM_URL,
+  },
+  {
+    src: '/work/anim-reel-06.mp4',
+    alt: 'Animated motion piece 06',
+    caption: 'Animation — motion piece 06',
     instagramUrl: INSTAGRAM_URL,
   },
 ];
@@ -190,28 +201,8 @@ export default function Work() {
       {/* ============ 01 ANIMATION ============ */}
       <section className="mx-auto max-w-7xl px-6 pb-24 md:px-10">
         <SectionLabel index="01" title="ANIMATION" />
-        <Reveal delay={0.1} className="mt-8">
-          <div className="relative overflow-hidden border hairline">
-            <video
-              src={withBase(animationTile.src)}
-              muted
-              loop
-              autoPlay
-              playsInline
-              className="aspect-video w-full object-cover"
-            />
-            <a
-              href={animationTile.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute bottom-4 right-4 z-10 rounded-full bg-ink/70 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.2em] text-paper transition-colors duration-300 hover:bg-blush hover:text-ink"
-            >
-              WATCH ON INSTAGRAM ↗
-            </a>
-          </div>
-        </Reveal>
         {/* Animation motion pieces */}
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {animationVideos.map((item, i) => (
             <Reveal key={item.src} delay={i * 0.08}>
               <VideoTile item={item} aspect="aspect-[4/5]" />
