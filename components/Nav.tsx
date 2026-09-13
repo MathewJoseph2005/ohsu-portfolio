@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import InstagramIcon from './InstagramIcon';
+import { INSTAGRAM_URL } from '@/lib/site';
 
 const links = [
   { href: '/', label: 'HOME' },
@@ -46,7 +47,15 @@ export default function Nav() {
               );
             })}
             <span className="hidden h-3 w-px bg-paper/20 sm:block" aria-hidden />
-            <InstagramIcon className="h-4 w-4 text-paper/70 transition-colors duration-300 hover:text-blush sm:block" />
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Evrista on Instagram"
+              className="text-paper/70 transition-colors duration-300 hover:text-blush"
+            >
+              <InstagramIcon className="h-4 w-4" />
+            </a>
           </div>
         </nav>
       </div>

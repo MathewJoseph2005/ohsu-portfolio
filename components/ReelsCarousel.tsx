@@ -1,7 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useMotionValueEvent,
+} from 'framer-motion';
 import { withBase } from '@/lib/site';
 import GrainOverlay from './GrainOverlay';
 import LazyVideo from './LazyVideo';
@@ -14,92 +22,122 @@ type Reel = {
   instagramUrl: string;
 };
 
+/**
+ * Scroll-driven horizontal Reels.
+ *
+ * Vertical scroll through a tall pinned section drives the cards
+ * horizontally (scrub + spring smoothing), so every reel is revealed
+ * in sequence. Falls back to a plain horizontal drag-scroll when
+ * prefers-reduced-motion is set.
+ */
 export default function ReelsCarousel({ reels }: { reels: Reel[] }) {
+  const reduce = useReducedMotion();
+  const outerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const isDown = useRef(false);
-  const startX = useRef(0);
-  const startScroll = useRef(0);
+  const [distance, setDistance] = useState(0);
+  const [active, setActive] = useState(0);
 
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    const el = trackRef.current;
-    if (!el) return;
-    isDown.current = true;
-    startX.current = e.clientX;
-    startScroll.current = el.scrollLeft;
-    el.setPointerCapture(e.pointerId);
-    el.classList.add('cursor-grabbing');
-  }, []);
+  const { scrollYProgress } = useScroll({
+    target: outerRef,
+    offset: ['start start', 'end end'],
+  });
 
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    const el = trackRef.current;
-    if (!el || !isDown.current) return;
-    const dx = e.clientX - startX.current;
-    el.scrollLeft = startScroll.current - dx;
-  }, []);
+  // Spring smoothing = the "smooth animation" feel on scroll.
+  const smooth = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 30,
+    mass: 0.5,
+  });
 
-  const endDrag = useCallback((e: React.PointerEvent) => {
-    const el = trackRef.current;
-    if (!el) return;
-    isDown.current = false;
-    if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
-    el.classList.remove('cursor-grabbing');
-  }, []);
-
-  // GSAP: gentle momentum ease once pointer drag ends (progressive enhancement)
+  // Measure how far the track needs to travel: full width minus viewport,
+  // plus a little end padding so the last card clears the edge.
   useEffect(() => {
-    let ctx: gsap.Context | undefined;
-    let cancelled = false;
-    (async () => {
-      const gsapMod = await import('gsap');
-      if (cancelled) return;
-      const gsap = gsapMod.default ?? gsapMod;
-      const el = trackRef.current;
-      if (!el) return;
-      ctx = gsap.context(() => {
-        let target = el.scrollLeft;
-        let raf = 0;
-        el.addEventListener(
-          'wheel',
-          (e) => {
-            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-              e.preventDefault();
-              target = Math.max(
-                0,
-                Math.min(el.scrollWidth - el.clientWidth, target + e.deltaX),
-              );
-              gsap.to(el, { scrollTo: undefined, duration: 0 }); // no-op guard
-              cancelAnimationFrame(raf);
-              const step = () => {
-                el.scrollLeft += (target - el.scrollLeft) * 0.18;
-                if (Math.abs(target - el.scrollLeft) > 1)
-                  raf = requestAnimationFrame(step);
-              };
-              cancelAnimationFrame(raf);
-              raf = requestAnimationFrame(step);
-            }
-          },
-          { passive: false },
-        );
-      }, el);
-    })();
-    return () => {
-      cancelled = true;
-      ctx?.revert();
+    const measure = () => {
+      const track = trackRef.current;
+      if (!track) return;
+      const scrollWidth = track.scrollWidth;
+      const viewport = window.innerWidth;
+      setDistance(Math.max(0, scrollWidth - viewport + 48));
     };
-  }, []);
+    measure();
+    window.addEventListener('resize', measure);
+    // Re-measure after fonts/media settle.
+    const t = setTimeout(measure, 500);
+    return () => {
+      window.removeEventListener('resize', measure);
+      clearTimeout(t);
+    };
+  }, [reels.length]);
+
+  // Start slightly inset so the first card aligns with the page grid,
+  // end with the last card fully visible.
+  const x = useTransform(smooth, [0, 1], [0, -distance]);
+
+  useMotionValueEvent(smooth, 'change', (v) => {
+    setActive(Math.min(reels.length - 1, Math.floor(v * reels.length)));
+  });
+
+  if (reduce) {
+    return (
+      <div className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-4 md:px-10">
+        {reels.map((reel) => (
+          <ReelCard key={reel.src + reel.caption} reel={reel} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div
-      ref={trackRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
-      className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:thin] cursor-grab select-none"
+      ref={outerRef}
+      className="relative"
+      style={{ height: `${Math.max(250, 120 + reels.length * 45)}vh` }}
     >
-      {reels.map((reel) => (
-        <ReelCard key={reel.src + reel.caption} reel={reel} />
-      ))}
+      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+        {/* Sticky mini-header: counter + hint stays while cards travel */}
+        <div className="mx-auto mb-8 flex w-full max-w-7xl items-center justify-between px-6 md:px-10">
+          <span className="label">
+            {String(active + 1).padStart(2, '0')} / {String(reels.length).padStart(2, '0')}
+          </span>
+          <span className="label animate-pulse">KEEP SCROLLING ↓</span>
+        </div>
+
+        <motion.div
+          ref={trackRef}
+          style={{ x, willChange: 'transform' }}
+          className="flex w-max items-stretch gap-6 pl-6 pr-6 md:pl-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))] md:pr-16"
+        >
+          {reels.map((reel, i) => (
+            <motion.div
+              key={reel.src + reel.caption}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-10% 0px' }}
+              transition={{
+                duration: 0.7,
+                delay: Math.min(i * 0.05, 0.2),
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              <ReelCard reel={reel} />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Progress rail */}
+        <div className="mx-auto mt-10 w-full max-w-7xl px-6 md:px-10">
+          <div className="h-px w-full bg-paper/15">
+            <motion.div
+              style={{ scaleX: smooth }}
+              className="h-px w-full origin-left bg-blush"
+            />
+          </div>
+          <div className="mt-4 flex items-center justify-between">
+            <span className="label">SCROLL TO EXPLORE</span>
+            <span className="label hidden sm:block">ALL {reels.length} REELS IN VIEW SEQUENCE</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

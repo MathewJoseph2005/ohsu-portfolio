@@ -6,25 +6,19 @@ import VideoTile, { type VideoItem } from '@/components/VideoTile';
 import ReelsCarousel from '@/components/ReelsCarousel';
 import Footer from '@/components/Footer';
 
-const ANIMATION_PARAGRAPH =
-  'Animation is illustration given time. These motion pieces and illustrated frames started as flat vector artwork — faces, eyes, couples, lotus ponds — then found rhythm: blinks, drifting water, fading light. Each one is built frame by frame to carry a single feeling, from a coming-soon teaser to quiet cinematic moments.';
+const ANIMATION_DESCRIPTION =
+  'Illustration given time. Hand-drawn characters, moonlit windows and close-up eyes move frame by frame — each clip and still is built around a single feeling, from coming-soon teasers to quiet cinematic moments.';
 
-const ADS_PARAGRAPH =
-  'Identity work and campaign design. From the Evrista mark itself to festival campaigns and branded concept posters, each piece is built around a single clear idea and executed across type, colour and composition so it feels like one voice.';
+const ADS_DESCRIPTION =
+  'Identity work and campaign design. From the Evrista mark itself to festival campaigns and branded concept posters — every piece is built around one clear idea and carried across type, colour and composition so it speaks with a single voice.';
+
+const REELS_DESCRIPTION =
+  'Short-form edits and photo composites made for the scroll — classical performance footage, editorial portraiture and memory films. Keep scrolling and the sequence travels with you.';
+
+const POSTERS_DESCRIPTION =
+  'Hand-redrawn poster recreations and tribute design — films from Bangalore Days to Hi Nanna reimagined with new type, colour and composition, alongside personal work like a First Holy Communion invitation.';
 
 const animationVideos: VideoItem[] = [
-  {
-    src: '/work/anim-reel-01.mp4',
-    alt: 'Animated motion piece 01',
-    caption: 'Animation — motion piece 01',
-    instagramUrl: INSTAGRAM_URL,
-  },
-  {
-    src: '/work/anim-reel-02.mp4',
-    alt: 'Animated motion piece 02',
-    caption: 'Animation — motion piece 02',
-    instagramUrl: INSTAGRAM_URL,
-  },
   {
     src: '/work/anim-reel-03.mp4',
     alt: 'Sunset couple animated illustration',
@@ -174,13 +168,39 @@ const posters: WorkItem[] = [
   },
 ];
 
-function SectionLabel({ index, title }: { index: string; title: string }) {
+/**
+ * Section heading system: pill label, oversized serif title and a
+ * prominent, readable description so every section explains itself.
+ */
+function SectionHeader({
+  index,
+  title,
+  display,
+  description,
+}: {
+  index: string;
+  title: string;
+  display: string;
+  description: string;
+}) {
   return (
-    <Reveal>
-      <span className="inline-block rounded-full border border-blush/40 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.25em] text-blush">
-        {index} / {title}
-      </span>
-    </Reveal>
+    <div className="max-w-3xl">
+      <Reveal>
+        <span className="inline-block rounded-full border border-blush/40 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.25em] text-blush">
+          {index} / {title}
+        </span>
+      </Reveal>
+      <Reveal delay={0.08}>
+        <h2 className="mt-6 font-serif text-5xl leading-[1.05] text-paper md:text-7xl">
+          {display}
+        </h2>
+      </Reveal>
+      <Reveal delay={0.16}>
+        <p className="mt-5 border-l-2 border-blush/50 pl-5 font-sans text-base leading-relaxed text-paper/80 md:text-lg md:leading-relaxed">
+          {description}
+        </p>
+      </Reveal>
+    </div>
   );
 }
 
@@ -188,7 +208,7 @@ export default function Work() {
   return (
     <PageTransition>
       {/* ============ HEADER ============ */}
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-32 md:px-10 md:pt-40">
+      <section className="mx-auto max-w-7xl px-6 pb-20 pt-32 md:px-10 md:pt-40">
         <Reveal>
           <p className="label mb-6">SELECTED WORK — 2024–2026</p>
         </Reveal>
@@ -197,13 +217,25 @@ export default function Work() {
             Work
           </h1>
         </Reveal>
+        <Reveal delay={0.18}>
+          <p className="mt-6 max-w-2xl font-sans text-base leading-relaxed text-paper/80 md:text-lg">
+            Motion, identity, editorial and poster work by Evrista — a studio built on
+            turning ideas and emotions into visuals people can feel.
+          </p>
+        </Reveal>
       </section>
 
       {/* ============ 01 ANIMATION ============ */}
       <section className="mx-auto max-w-7xl px-6 pb-24 md:px-10">
-        <SectionLabel index="01" title="ANIMATION" />
+        <SectionHeader
+          index="01"
+          title="ANIMATION"
+          display="Animation"
+          description={ANIMATION_DESCRIPTION}
+        />
+
         {/* Animation motion pieces */}
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {animationVideos.map((item, i) => (
             <Reveal key={item.src} delay={i * 0.08}>
               <VideoTile item={item} aspect="aspect-[4/5]" />
@@ -219,53 +251,48 @@ export default function Work() {
             </Reveal>
           ))}
         </div>
-
-        <Reveal delay={0.15} className="mt-8">
-          <p className="max-w-2xl font-sans text-sm leading-relaxed text-paper/60">
-            {ANIMATION_PARAGRAPH}
-          </p>
-        </Reveal>
       </section>
 
       {/* ============ 02 ADS & LOGO ============ */}
       <section className="mx-auto max-w-7xl px-6 pb-24 md:px-10">
-        <SectionLabel index="02" title="ADS &amp; LOGO" />
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <SectionHeader
+          index="02"
+          title="ADS &amp; LOGO"
+          display="Ads & Logo"
+          description={ADS_DESCRIPTION}
+        />
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {adsItems.map((item, i) => (
             <Reveal key={item.src} delay={i * 0.08}>
               <WorkTile item={item} aspect="aspect-[4/5]" />
             </Reveal>
           ))}
         </div>
-        <Reveal delay={0.15} className="mt-8">
-          <p className="max-w-2xl font-sans text-sm leading-relaxed text-paper/60">
-            {ADS_PARAGRAPH}
-          </p>
-        </Reveal>
       </section>
 
       {/* ============ 03 REELS ============ */}
-      <section className="overflow-hidden border-t hairline py-24">
-        <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <SectionLabel index="03" title="REELS" />
-          <Reveal delay={0.1}>
-            <p className="mt-6 max-w-2xl font-sans text-sm leading-relaxed text-paper/60">
-              Short-form edits and composites — drag through the reel.
-            </p>
-          </Reveal>
+      <section className="border-t hairline">
+        <div className="mx-auto max-w-7xl px-6 pt-24 md:px-10">
+          <SectionHeader
+            index="03"
+            title="REELS"
+            display="Reels"
+            description={REELS_DESCRIPTION}
+          />
         </div>
-        <div className="mx-auto mt-10 max-w-7xl px-6 md:px-10">
-          <Reveal delay={0.15}>
-            <ReelsCarousel reels={reels} />
-          </Reveal>
-        </div>
+        <ReelsCarousel reels={reels} />
       </section>
 
       {/* ============ 04 POSTERS ============ */}
       <section className="border-t hairline">
         <div className="mx-auto max-w-7xl px-6 py-24 md:px-10">
-          <SectionLabel index="04" title="POSTERS" />
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeader
+            index="04"
+            title="POSTERS"
+            display="Posters"
+            description={POSTERS_DESCRIPTION}
+          />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {posters.map((item, i) => (
               <Reveal key={item.src} delay={(i % 4) * 0.08}>
                 <WorkTile item={item} aspect="aspect-[3/4]" />
